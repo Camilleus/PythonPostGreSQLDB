@@ -44,10 +44,21 @@ class Grade(Base):
     subject = relationship('Subject', back_populates='grades')
 
 
-if __name__ == '__main__":
-    engine = create_engine('postgresql://Camilleus:J3st3mM1l1on3r3m@localhost:5432/PythonPostgresV1')
+if __name__ == '__main__':
+    try:
+        engine = create_engine('postgresql://Camilleus:J3st3mM1l1on3r3m@localhost:5432/PythonPostgresV1')
+        
+        if not engine:
+            raise Exception("Failed to create the engine.")
 
-    Base.metadata.create_all(engine)
+        Base.metadata.create_all(engine)
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        if session:
+            session.close()
