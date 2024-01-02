@@ -1,7 +1,7 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Float
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.sql import func
+import datetime
 
 Base = declarative_base()
 
@@ -39,13 +39,15 @@ class Grade(Base):
     student_id = Column(Integer, ForeignKey('students.id'))
     subject_id = Column(Integer, ForeignKey('subjects.id'))
     grade = Column(Integer)
-    date = Column(DateTime, default=func.now())
+    date = Column(DateTime, default=datetime.datetime.utcnow)
     student = relationship('Student', back_populates='grades')
     subject = relationship('Subject', back_populates='grades')
 
-engine = create_engine('postgresql://Camilleus:J3st3mM1l1on3r3m@localhost:5432/PythonPostgresV1')
 
-Base.metadata.create_all(engine)
+if __name__ == '__main__":
+    engine = create_engine('postgresql://Camilleus:J3st3mM1l1on3r3m@localhost:5432/PythonPostgresV1')
 
-Session = sessionmaker(bind=engine)
-session = Session()
+    Base.metadata.create_all(engine)
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
